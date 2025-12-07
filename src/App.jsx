@@ -304,6 +304,7 @@ const App = () => {
                 <header className="flex flex-col items-start pb-8 border-b border-gray-100 mb-8">
                     <div className="text-3xl font-extrabold tracking-tighter text-green-700">
                         CleanCar Qualify<span className="text-coffee-500">.AI</span>
+                        <span className="ml-2 text-xs font-normal text-gray-400">v2.0 • URL + CSV</span>
                     </div>
                     <p className="text-lg text-gray-500 mt-1">California Tax Benefit Image Classifier</p>
                     
