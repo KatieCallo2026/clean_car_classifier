@@ -2,8 +2,10 @@
 CleanCar Classifier Backend API
 Uses your trained Keras MobileNetV2 model directly - no conversion needed!
 """
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
 import keras
 import numpy as np
 import pandas as pd
@@ -30,25 +32,62 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Enable CORS for React app (running on various dev ports)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:3004",
-        "http://localhost:3005",
-        "http://localhost:5173",
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:3004",
-        "http://127.0.0.1:3005",
-        "http://127.0.0.1:5173",
-        "https://cleancarclassifier-git-main-katie-callos-projects.vercel.app",
-        "https://*.vercel.app"
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Custom CORS middleware to handle Vercel wildcard domains
+class CustomCORSMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        origin = request.headers.get("origin")
+        
+        # List of allowed origins
+        allowed_origins = [
+            "http://localhost:3000",
+            "http://localhost:3004",
+            "http://localhost:3005",
+            "http://localhost:5173",
+            "http://127.0.0.1:3000",
+            "http://127.0.0.1:3004",
+            "http://127.0.0.1:3005",
+            "http://127.0.0.1:5173",
+        ]
+        
+        # Check if origin matches allowed patterns
+        is_allowed = False
+        if origin:
+            # Check exact matches
+            if origin in allowed_origins:
+                is_allowed = True
+            # Check Vercel domains (katie-callos-projects.vercel.app)
+            elif origin.endswith(".vercel.app") and "katie-callos-projects" in origin:
+                is_allowed = True
+        
+        # Handle preflight requests
+        if request.method == "OPTIONS":
+            if is_allowed and origin:
+                return Response(
+                    status_code=200,
+                    headers={
+                        "Access-Control-Allow-Origin": origin,
+                        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                        "Access-Control-Allow-Headers": "*",
+                        "Access-Control-Allow-Credentials": "true",
+                    }
+                )
+            else:
+                return Response(status_code=403)
+        
+        # Process actual request
+        response = await call_next(request)
+        
+        # Add CORS headers if origin is allowed
+        if is_allowed and origin:
+            response.headers["Access-Control-Allow-Origin"] = origin
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+            response.headers["Access-Control-Allow-Headers"] = "*"
+        
+        return response
+
+# Add custom CORS middleware
+app.add_middleware(CustomCORSMiddleware)
 
 # ============================================
 # LOAD MODEL AND METADATA
