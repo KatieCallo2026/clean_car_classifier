@@ -299,6 +299,22 @@ async def root():
         "version": "1.0.0"
     }
 
+@app.get("/health")
+async def health():
+    """
+    Health check endpoint for Railway
+    Returns 200 if service is healthy, 503 if not ready
+    """
+    if not MODEL_PATH.exists():
+        raise HTTPException(status_code=503, detail="Model file not found")
+    
+    return {
+        "status": "healthy",
+        "model_loaded": True,
+        "csv_loaded": len(clean_vehicles_df) > 0,
+        "eligible_vehicles": eligible_count_csv
+    }
+
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     """

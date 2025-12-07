@@ -1,5 +1,15 @@
 # Nixpacks configuration for Railway
-# Requirements.txt is in root, app.py is in backend/
+# Provides system dependencies for TensorFlow
+
+[phases.setup]
+nixPkgs = ['python310', 'libGL', 'glib', 'gcc']
+
+[phases.install]
+cmds = ['pip install --upgrade pip', 'pip install -r requirements.txt']
+
+[phases.build]
+cmds = ['echo "✅ Build complete - TensorFlow 2.20.0 installed"']
 
 [start]
-cmd = "cd backend && python app.py"
+cmd = 'cd backend && uvicorn app:app --host 0.0.0.0 --port $PORT --workers 1'
+
