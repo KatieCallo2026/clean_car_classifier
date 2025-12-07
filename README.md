@@ -5,20 +5,27 @@ A React web application that uses machine learning to classify car make/model fr
 ![Project Status](https://img.shields.io/badge/status-active-success.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-## 🎯 Project Overview
+## � Live Demo
+
+- **Frontend**: [cleancarclassifier-git-main-katie-callos-projects.vercel.app](https://cleancarclassifier-git-main-katie-callos-projects.vercel.app)
+- **Backend API**: [cleancarclassifier-production.up.railway.app](https://cleancarclassifier-production.up.railway.app)
+
+## �🎯 Project Overview
 
 This project implements a **Type 1a Multiclass Image Classification** model that:
-- Identifies a car's make and model from user-uploaded photos
-- Cross-references predictions with California's Clean Cars 4 All program requirements
-- Provides instant eligibility status for tax benefits
+- Identifies a car's make and model from user-uploaded photos (196 classes)
+- Cross-references predictions with California's Clean Cars 4 All program CSV database
+- Provides instant eligibility status for tax benefits (39 eligible vehicles)
+- Supports both file upload and URL input
 
 ### Technology Stack
 
-- **Frontend**: React 18 with Vite
+- **Frontend**: React 18 with Vite, deployed on Vercel
+- **Backend**: FastAPI with TensorFlow/Keras, deployed on Railway
 - **Styling**: Tailwind CSS with custom color palette
 - **Icons**: Lucide React
-- **ML Model**: CNN classifier (trained separately in Google Colab)
-- **Backend**: Firebase (placeholder for future integration)
+- **ML Model**: MobileNetV2 CNN (196 car classes)
+- **Data**: CSV database with 429 vehicles, 39 eligible for Clean Cars 4 All
 
 ### Color Scheme
 

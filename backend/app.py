@@ -10,6 +10,7 @@ import pandas as pd
 from PIL import Image
 import json
 import io
+import os
 from pathlib import Path
 import logging
 import requests
@@ -29,16 +30,20 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Enable CORS for React app (running on port 3000, 5173, or 3004)
+# Enable CORS for React app (running on various dev ports)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
         "http://localhost:3004",
+        "http://localhost:3005",
         "http://localhost:5173",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:3004",
-        "http://127.0.0.1:5173"
+        "http://127.0.0.1:3005",
+        "http://127.0.0.1:5173",
+        "https://cleancarclassifier-git-main-katie-callos-projects.vercel.app",
+        "https://*.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -438,9 +443,13 @@ async def get_eligible_cars():
 if __name__ == "__main__":
     import uvicorn
     
+    # Use Railway's PORT environment variable, fallback to 8000 for local dev
+    port = int(os.environ.get("PORT", 8000))
+    
     logger.info("="*50)
     logger.info("🚗 Starting CleanCar Classifier Backend")
     logger.info("="*50)
+    logger.info(f"Port: {port}")
     logger.info(f"Model: {MODEL_PATH.name}")
     logger.info(f"Classes: {NUM_CLASSES}")
     logger.info(f"Eligible: {sum(eligibility_map)}")
@@ -449,6 +458,6 @@ if __name__ == "__main__":
     uvicorn.run(
         app,
         host="0.0.0.0",
-        port=8000,
+        port=port,
         log_level="info"
     )
