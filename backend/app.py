@@ -92,8 +92,26 @@ app.add_middleware(CustomCORSMiddleware)
 # ============================================
 # LOAD MODEL AND METADATA
 # ============================================
-MODEL_DIR = Path(__file__).parent.parent / "src" / "services" / "clean_car_tax_break_final_model"
-MODEL_PATH = MODEL_DIR / "clean_car_eligibility_model.keras"
+# Try multiple paths for model (local dev vs Railway deployment)
+BACKEND_DIR = Path(__file__).parent
+MODEL_DIR_OPTIONS = [
+    BACKEND_DIR.parent / "src" / "services" / "clean_car_tax_break_final_model",  # Local dev
+    BACKEND_DIR / "clean_car_tax_break_final_model",  # Railway (if copied)
+]
+
+MODEL_PATH = None
+for model_dir in MODEL_DIR_OPTIONS:
+    potential_path = model_dir / "clean_car_eligibility_model.keras"
+    if potential_path.exists():
+        MODEL_PATH = potential_path
+        MODEL_DIR = model_dir
+        break
+
+if MODEL_PATH is None:
+    logger.error("Model file not found in any expected location!")
+    logger.error(f"Tried: {[str(p) for p in MODEL_DIR_OPTIONS]}")
+    raise FileNotFoundError("Model file not found")
+
 CSV_PATH = Path(__file__).parent / "clean_vehicle_dataset_2015_2025.csv"
 
 logger.info(f"Loading model from: {MODEL_PATH}")

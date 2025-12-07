@@ -1,0 +1,17 @@
+# Nixpacks configuration for Railway
+providers = ["python"]
+
+[phases.setup]
+nixPkgs = ["python310", "gcc", "g++"]
+
+[phases.install]
+cmds = [
+    "pip install --upgrade pip",
+    "pip install -r backend/requirements-railway.txt"
+]
+
+[phases.build]
+cmds = ["echo 'Build complete'"]
+
+[start]
+cmd = "cd backend && python app.py"
