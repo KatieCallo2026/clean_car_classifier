@@ -10,7 +10,7 @@
 
 // Configuration
 const USE_SIMULATION = false; // Using real model via backend
-const BACKEND_URL = 'http://localhost:8000';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
 
 // Simulation data - remove when real model is integrated
 const SIMULATION_MODELS = [
