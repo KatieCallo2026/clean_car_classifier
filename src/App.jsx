@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Upload, Car, CheckCircle, XCircle, ImageIcon } from 'lucide-react';
-import { predictCarModel, validateImageFile } from './services/modelService';
+import { Upload, Car, CheckCircle, XCircle, ImageIcon, AlertCircle, RotateCcw } from 'lucide-react';
+import { predictCarModel, predictCarModelFromUrl, checkBackendHealth, getModelInfo } from './services/modelService';
 
 // --- Firebase Configuration Placeholder ---
 // TODO: Replace with actual Firebase config when backend is ready
@@ -10,16 +10,34 @@ const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial
 const App = () => {
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
+    const [inputMode, setInputMode] = useState('upload'); // 'upload' or 'url'
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [results, setResults] = useState(null);
+    const [error, setError] = useState(null);
+    const [modelInfo, setModelInfo] = useState(null);
+    const [backendStatus, setBackendStatus] = useState('checking'); // 'checking', 'connected', 'error'
 
-    // Firebase initialization check
+    // Check backend connection on mount
     useEffect(() => {
-        if (firebaseConfig) {
-            console.log("Firebase config loaded. Ready for real backend connection.");
-        } else {
-            console.warn("Firebase config not available. Running simulation mode.");
-        }
+        const initBackend = async () => {
+            try {
+                await checkBackendHealth();
+                const info = await getModelInfo();
+                setModelInfo(info);
+                setBackendStatus('connected');
+                
+                // Warn if metadata files are missing
+                if (!info.hasClassNames || !info.hasEligibilityMap) {
+                    console.warn('⚠️ Metadata files missing. Please export from Colab.');
+                }
+            } catch (err) {
+                console.error('Failed to connect to backend:', err);
+                setBackendStatus('error');
+                setError(err.message);
+            }
+        };
+        initBackend();
     }, []);
 
     const handleFileUpload = useCallback((event) => {
@@ -27,64 +45,188 @@ const App = () => {
         if (selectedFile) {
             // Validate file size (max 5MB)
             if (selectedFile.size > 5 * 1024 * 1024) {
-                alert('File size must be less than 5MB');
+                setError('File size must be less than 5MB');
                 return;
             }
             
             setFile(selectedFile);
             setPreviewUrl(URL.createObjectURL(selectedFile));
-            setResults(null); // Reset results on new upload
+            setImageUrl('');
+            setResults(null);
+            setError(null);
         } else {
             setFile(null);
             setPreviewUrl('');
         }
     }, []);
 
-    const startAnalysis = async () => {
-        if (!file) return;
+    const handleUrlChange = useCallback((event) => {
+        const url = event.target.value;
+        setImageUrl(url);
+        setError(null);
+        
+        if (url) {
+            setFile(null);
+            setPreviewUrl(url);
+            setResults(null);
+        } else {
+            setPreviewUrl('');
+        }
+    }, []);
 
-        // Validate file before processing
-        const validation = validateImageFile(file);
-        if (!validation.isValid) {
-            alert(validation.error);
+    const handleUrlSubmit = useCallback(() => {
+        if (!imageUrl) {
+            setError('Please enter an image URL');
+            return;
+        }
+        
+        // Basic URL validation
+        try {
+            new URL(imageUrl);
+            setPreviewUrl(imageUrl);
+            setFile(null);
+            setResults(null);
+            setError(null);
+        } catch (err) {
+            setError('Please enter a valid URL');
+        }
+    }, [imageUrl]);
+
+    const startAnalysis = async () => {
+        // Check backend status
+        if (backendStatus !== 'connected') {
+            setError('Backend server is not connected. Please start it with: cd backend && python app.py');
+            return;
+        }
+
+        // Validate input
+        if (inputMode === 'upload' && !file) {
+            setError('Please upload a file first');
+            return;
+        }
+        
+        if (inputMode === 'url' && !imageUrl) {
+            setError('Please enter an image URL first');
             return;
         }
 
         setIsAnalyzing(true);
         setResults(null);
+        setError(null);
         
         try {
-            // Call the model service to predict car model
-            const prediction = await predictCarModel(file);
+            let prediction;
+            
+            if (inputMode === 'upload') {
+                // Use file upload endpoint
+                prediction = await predictCarModel(file);
+            } else {
+                // Use URL endpoint (backend fetches the image)
+                prediction = await predictCarModelFromUrl(imageUrl);
+            }
+            
             setResults(prediction);
-        } catch (error) {
-            console.error('Analysis error:', error);
-            alert(error.message || 'Failed to analyze car image. Please try again.');
+        } catch (err) {
+            console.error('Analysis error:', err);
+            setError(err.message || 'Failed to analyze image. Please try again.');
         } finally {
             setIsAnalyzing(false);
         }
     };
 
+    const handleReset = useCallback(() => {
+        setFile(null);
+        setPreviewUrl('');
+        setImageUrl('');
+        setResults(null);
+        setError(null);
+        setIsAnalyzing(false);
+        // Clear file input
+        const fileInput = document.getElementById('car-image-upload');
+        if (fileInput) fileInput.value = '';
+    }, []);
+
     // File Upload Area Component
     const FileUploadArea = () => (
-        <div 
-            className="border-4 border-dashed border-green-100 bg-beige-200/50 p-10 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:border-green-700 transition duration-300"
-            onClick={() => document.getElementById('car-image-upload').click()}
-        >
-            <div className="text-green-700 mb-3">
-                {file ? <ImageIcon className="w-10 h-10" /> : <Upload className="w-10 h-10" />}
+        <div className="space-y-4">
+            {/* Tab Selector */}
+            <div className="flex gap-2 bg-beige-200 p-1 rounded-lg">
+                <button
+                    onClick={() => setInputMode('upload')}
+                    className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+                        inputMode === 'upload'
+                            ? 'bg-green-700 text-white shadow-md'
+                            : 'text-green-700 hover:bg-beige-300'
+                    }`}
+                >
+                    📁 Upload File
+                </button>
+                <button
+                    onClick={() => setInputMode('url')}
+                    className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+                        inputMode === 'url'
+                            ? 'bg-green-700 text-white shadow-md'
+                            : 'text-green-700 hover:bg-beige-300'
+                    }`}
+                >
+                    🔗 Image URL
+                </button>
             </div>
-            <p className="text-lg font-semibold text-green-700">
-                {file ? `File selected: ${file.name}` : 'Click to upload your car photo'}
-            </p>
-            <p className="text-sm text-gray-500 mt-1">PNG, JPG, or HEIC (Max 5MB)</p>
-            <input 
-                type="file" 
-                id="car-image-upload" 
-                className="hidden" 
-                accept="image/*" 
-                onChange={handleFileUpload}
-            />
+
+            {/* Upload Mode */}
+            {inputMode === 'upload' && (
+                <div 
+                    className="border-4 border-dashed border-green-100 bg-beige-200/50 p-10 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:border-green-700 transition duration-300"
+                    onClick={() => document.getElementById('car-image-upload').click()}
+                >
+                    <div className="text-green-700 mb-3">
+                        {file ? <ImageIcon className="w-10 h-10" /> : <Upload className="w-10 h-10" />}
+                    </div>
+                    <p className="text-lg font-semibold text-green-700">
+                        {file ? `File selected: ${file.name}` : 'Click to upload your car photo'}
+                    </p>
+                    <p className="text-sm text-gray-500 mt-1">PNG, JPG, or HEIC (Max 5MB)</p>
+                    <input 
+                        type="file" 
+                        id="car-image-upload" 
+                        className="hidden" 
+                        accept="image/*" 
+                        onChange={handleFileUpload}
+                    />
+                </div>
+            )}
+
+            {/* URL Mode */}
+            {inputMode === 'url' && (
+                <div className="border-4 border-dashed border-green-100 bg-beige-200/50 p-8 rounded-2xl">
+                    <div className="text-green-700 mb-4 flex items-center justify-center">
+                        <ImageIcon className="w-10 h-10" />
+                    </div>
+                    <p className="text-lg font-semibold text-green-700 text-center mb-4">
+                        Enter Image URL
+                    </p>
+                    <div className="flex gap-2">
+                        <input
+                            type="url"
+                            value={imageUrl}
+                            onChange={handleUrlChange}
+                            onKeyPress={(e) => e.key === 'Enter' && handleUrlSubmit()}
+                            placeholder="https://example.com/car-image.jpg"
+                            className="flex-1 px-4 py-3 border-2 border-green-100 rounded-lg focus:outline-none focus:border-green-700 bg-white text-gray-800 placeholder-gray-400"
+                        />
+                        <button
+                            onClick={handleUrlSubmit}
+                            disabled={!imageUrl}
+                            className="px-6 py-3 bg-green-700 text-white rounded-lg font-semibold hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                            Load
+                        </button>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-3 text-center">
+                        Paste a direct link to a car image
+                    </p>
+                </div>
+            )}
         </div>
     );
 
@@ -164,7 +306,34 @@ const App = () => {
                         CleanCar Qualify<span className="text-coffee-500">.AI</span>
                     </div>
                     <p className="text-lg text-gray-500 mt-1">California Tax Benefit Image Classifier</p>
+                    
+                    {/* Backend Status Indicator */}
+                    {modelInfo && backendStatus === 'connected' && (
+                        <div className="mt-3 flex items-center gap-2 text-sm">
+                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            <span className="text-gray-600">
+                                🤖 {modelInfo.modelType} • {modelInfo.numClasses} classes • {modelInfo.eligibleCount} eligible
+                            </span>
+                        </div>
+                    )}
+                    
+                    {backendStatus === 'error' && (
+                        <div className="mt-3 flex items-center gap-2 text-sm text-red-600">
+                            <AlertCircle className="w-4 h-4" />
+                            <span>Backend not connected</span>
+                        </div>
+                    )}
                 </header>
+
+                {/* Error Display */}
+                {error && (
+                    <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
+                        <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                            <p className="text-red-800 whitespace-pre-line">{error}</p>
+                        </div>
+                    </div>
+                )}
 
                 {/* Main Input Section */}
                 <section id="input-section">
@@ -191,8 +360,13 @@ const App = () => {
                     {/* Action Button */}
                     <button 
                         id="analyze-button" 
-                        className="bg-green-700 text-white w-full mt-8 py-4 rounded-xl text-xl font-semibold flex items-center justify-center transition-all duration-300 disabled:opacity-50 hover:bg-green-800"
-                        disabled={!file || isAnalyzing}
+                        className="bg-green-700 text-white w-full mt-8 py-4 rounded-xl text-xl font-semibold flex items-center justify-center transition-all duration-300 disabled:opacity-50 hover:bg-green-800 disabled:cursor-not-allowed"
+                        disabled={
+                            (inputMode === 'upload' && !file) || 
+                            (inputMode === 'url' && !imageUrl) || 
+                            isAnalyzing || 
+                            backendStatus !== 'connected'
+                        }
                         onClick={startAnalysis}
                     >
                         <div 
@@ -205,9 +379,19 @@ const App = () => {
 
                 {/* Results Section */}
                 <section id="results-section" className={`mt-12 ${results ? '' : 'hidden'}`}>
-                    <h2 className="text-3xl font-bold border-b border-gray-100 pb-4 mb-6 text-coffee-950">
-                        Analysis Complete
-                    </h2>
+                    <div className="flex items-center justify-between border-b border-gray-100 pb-4 mb-6">
+                        <h2 className="text-3xl font-bold text-coffee-950">
+                            Analysis Complete
+                        </h2>
+                        <button
+                            onClick={handleReset}
+                            className="flex items-center gap-2 px-4 py-2 bg-beige-200 text-coffee-500 rounded-lg font-medium hover:bg-beige-300 hover:text-coffee-700 transition-all duration-200 shadow-sm hover:shadow-md group"
+                            title="Try another car"
+                        >
+                            <RotateCcw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
+                            <span>Try Again</span>
+                        </button>
+                    </div>
 
                     <div className="grid md:grid-cols-2 gap-8">
                         {/* Recognition Panel */}

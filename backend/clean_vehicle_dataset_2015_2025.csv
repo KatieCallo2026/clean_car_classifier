@@ -1,0 +1,430 @@
+Make,Model,Year,Vehicle_Type,MSRP_USD,Mileage_Cap_Flag,Eligible_CC4A_DCAP
+Tesla,Model S,2015,BEV,85000,Maybe,Yes
+Tesla,Model S,2016,BEV,85000,Maybe,Yes
+Tesla,Model S,2017,BEV,85000,Yes,Yes
+Tesla,Model S,2018,BEV,85000,Yes,Yes
+Tesla,Model S,2019,BEV,85000,Yes,Yes
+Tesla,Model S,2020,BEV,85000,Yes,Yes
+Tesla,Model S,2021,BEV,85000,Yes,Yes
+Tesla,Model S,2022,BEV,85000,Yes,Yes
+Tesla,Model S,2023,BEV,85000,Yes,Yes
+Tesla,Model S,2024,BEV,85000,Yes,Yes
+Tesla,Model S,2025,BEV,85000,Yes,Yes
+Tesla,Model 3,2015,BEV,50000,Maybe,Yes
+Tesla,Model 3,2016,BEV,50000,Maybe,Yes
+Tesla,Model 3,2017,BEV,50000,Yes,Yes
+Tesla,Model 3,2018,BEV,50000,Yes,Yes
+Tesla,Model 3,2019,BEV,50000,Yes,Yes
+Tesla,Model 3,2020,BEV,50000,Yes,Yes
+Tesla,Model 3,2021,BEV,50000,Yes,Yes
+Tesla,Model 3,2022,BEV,50000,Yes,Yes
+Tesla,Model 3,2023,BEV,50000,Yes,Yes
+Tesla,Model 3,2024,BEV,50000,Yes,Yes
+Tesla,Model 3,2025,BEV,50000,Yes,Yes
+Tesla,Model X,2015,BEV,102500,Maybe,Yes
+Tesla,Model X,2016,BEV,102500,Maybe,Yes
+Tesla,Model X,2017,BEV,102500,Yes,Yes
+Tesla,Model X,2018,BEV,102500,Yes,Yes
+Tesla,Model X,2019,BEV,102500,Yes,Yes
+Tesla,Model X,2020,BEV,102500,Yes,Yes
+Tesla,Model X,2021,BEV,102500,Yes,Yes
+Tesla,Model X,2022,BEV,102500,Yes,Yes
+Tesla,Model X,2023,BEV,102500,Yes,Yes
+Tesla,Model X,2024,BEV,102500,Yes,Yes
+Tesla,Model X,2025,BEV,102500,Yes,Yes
+Tesla,Model Y,2015,BEV,56000,Maybe,Yes
+Tesla,Model Y,2016,BEV,56000,Maybe,Yes
+Tesla,Model Y,2017,BEV,56000,Yes,Yes
+Tesla,Model Y,2018,BEV,56000,Yes,Yes
+Tesla,Model Y,2019,BEV,56000,Yes,Yes
+Tesla,Model Y,2020,BEV,56000,Yes,Yes
+Tesla,Model Y,2021,BEV,56000,Yes,Yes
+Tesla,Model Y,2022,BEV,56000,Yes,Yes
+Tesla,Model Y,2023,BEV,56000,Yes,Yes
+Tesla,Model Y,2024,BEV,56000,Yes,Yes
+Tesla,Model Y,2025,BEV,56000,Yes,Yes
+Nissan,Leaf,2015,BEV,32000,Maybe,Yes
+Nissan,Leaf,2016,BEV,32000,Maybe,Yes
+Nissan,Leaf,2017,BEV,32000,Yes,Yes
+Nissan,Leaf,2018,BEV,32000,Yes,Yes
+Nissan,Leaf,2019,BEV,32000,Yes,Yes
+Nissan,Leaf,2020,BEV,32000,Yes,Yes
+Nissan,Leaf,2021,BEV,32000,Yes,Yes
+Nissan,Leaf,2022,BEV,32000,Yes,Yes
+Nissan,Leaf,2023,BEV,32000,Yes,Yes
+Nissan,Leaf,2024,BEV,32000,Yes,Yes
+Nissan,Leaf,2025,BEV,32000,Yes,Yes
+Chevrolet,Bolt EV,2015,BEV,31000,Maybe,Yes
+Chevrolet,Bolt EV,2016,BEV,31000,Maybe,Yes
+Chevrolet,Bolt EV,2017,BEV,31000,Yes,Yes
+Chevrolet,Bolt EV,2018,BEV,31000,Yes,Yes
+Chevrolet,Bolt EV,2019,BEV,31000,Yes,Yes
+Chevrolet,Bolt EV,2020,BEV,31000,Yes,Yes
+Chevrolet,Bolt EV,2021,BEV,31000,Yes,Yes
+Chevrolet,Bolt EV,2022,BEV,31000,Yes,Yes
+Chevrolet,Bolt EV,2023,BEV,31000,Yes,Yes
+Chevrolet,Bolt EV,2024,BEV,31000,Yes,Yes
+Chevrolet,Bolt EV,2025,BEV,31000,Yes,Yes
+Hyundai,Kona Electric,2015,BEV,37500,Maybe,Yes
+Hyundai,Kona Electric,2016,BEV,37500,Maybe,Yes
+Hyundai,Kona Electric,2017,BEV,37500,Yes,Yes
+Hyundai,Kona Electric,2018,BEV,37500,Yes,Yes
+Hyundai,Kona Electric,2019,BEV,37500,Yes,Yes
+Hyundai,Kona Electric,2020,BEV,37500,Yes,Yes
+Hyundai,Kona Electric,2021,BEV,37500,Yes,Yes
+Hyundai,Kona Electric,2022,BEV,37500,Yes,Yes
+Hyundai,Kona Electric,2023,BEV,37500,Yes,Yes
+Hyundai,Kona Electric,2024,BEV,37500,Yes,Yes
+Hyundai,Kona Electric,2025,BEV,37500,Yes,Yes
+Hyundai,Ioniq Electric,2015,BEV,34000,Maybe,Yes
+Hyundai,Ioniq Electric,2016,BEV,34000,Maybe,Yes
+Hyundai,Ioniq Electric,2017,BEV,34000,Yes,Yes
+Hyundai,Ioniq Electric,2018,BEV,34000,Yes,Yes
+Hyundai,Ioniq Electric,2019,BEV,34000,Yes,Yes
+Hyundai,Ioniq Electric,2020,BEV,34000,Yes,Yes
+Hyundai,Ioniq Electric,2021,BEV,34000,Yes,Yes
+Hyundai,Ioniq Electric,2022,BEV,34000,Yes,Yes
+Hyundai,Ioniq Electric,2023,BEV,34000,Yes,Yes
+Hyundai,Ioniq Electric,2024,BEV,34000,Yes,Yes
+Hyundai,Ioniq Electric,2025,BEV,34000,Yes,Yes
+Kia,EV6,2015,BEV,52500,Maybe,Yes
+Kia,EV6,2016,BEV,52500,Maybe,Yes
+Kia,EV6,2017,BEV,52500,Yes,Yes
+Kia,EV6,2018,BEV,52500,Yes,Yes
+Kia,EV6,2019,BEV,52500,Yes,Yes
+Kia,EV6,2020,BEV,52500,Yes,Yes
+Kia,EV6,2021,BEV,52500,Yes,Yes
+Kia,EV6,2022,BEV,52500,Yes,Yes
+Kia,EV6,2023,BEV,52500,Yes,Yes
+Kia,EV6,2024,BEV,52500,Yes,Yes
+Kia,EV6,2025,BEV,52500,Yes,Yes
+Kia,Niro EV,2015,BEV,43000,Maybe,Yes
+Kia,Niro EV,2016,BEV,43000,Maybe,Yes
+Kia,Niro EV,2017,BEV,43000,Yes,Yes
+Kia,Niro EV,2018,BEV,43000,Yes,Yes
+Kia,Niro EV,2019,BEV,43000,Yes,Yes
+Kia,Niro EV,2020,BEV,43000,Yes,Yes
+Kia,Niro EV,2021,BEV,43000,Yes,Yes
+Kia,Niro EV,2022,BEV,43000,Yes,Yes
+Kia,Niro EV,2023,BEV,43000,Yes,Yes
+Kia,Niro EV,2024,BEV,43000,Yes,Yes
+Kia,Niro EV,2025,BEV,43000,Yes,Yes
+Ford,Mustang Mach-E,2015,BEV,56500,Maybe,Yes
+Ford,Mustang Mach-E,2016,BEV,56500,Maybe,Yes
+Ford,Mustang Mach-E,2017,BEV,56500,Yes,Yes
+Ford,Mustang Mach-E,2018,BEV,56500,Yes,Yes
+Ford,Mustang Mach-E,2019,BEV,56500,Yes,Yes
+Ford,Mustang Mach-E,2020,BEV,56500,Yes,Yes
+Ford,Mustang Mach-E,2021,BEV,56500,Yes,Yes
+Ford,Mustang Mach-E,2022,BEV,56500,Yes,Yes
+Ford,Mustang Mach-E,2023,BEV,56500,Yes,Yes
+Ford,Mustang Mach-E,2024,BEV,56500,Yes,Yes
+Ford,Mustang Mach-E,2025,BEV,56500,Yes,Yes
+Volkswagen,ID.4,2015,BEV,46500,Maybe,Yes
+Volkswagen,ID.4,2016,BEV,46500,Maybe,Yes
+Volkswagen,ID.4,2017,BEV,46500,Yes,Yes
+Volkswagen,ID.4,2018,BEV,46500,Yes,Yes
+Volkswagen,ID.4,2019,BEV,46500,Yes,Yes
+Volkswagen,ID.4,2020,BEV,46500,Yes,Yes
+Volkswagen,ID.4,2021,BEV,46500,Yes,Yes
+Volkswagen,ID.4,2022,BEV,46500,Yes,Yes
+Volkswagen,ID.4,2023,BEV,46500,Yes,Yes
+Volkswagen,ID.4,2024,BEV,46500,Yes,Yes
+Volkswagen,ID.4,2025,BEV,46500,Yes,Yes
+BMW,i3,2015,BEV,48500,Maybe,Yes
+BMW,i3,2016,BEV,48500,Maybe,Yes
+BMW,i3,2017,BEV,48500,Yes,Yes
+BMW,i3,2018,BEV,48500,Yes,Yes
+BMW,i3,2019,BEV,48500,Yes,Yes
+BMW,i3,2020,BEV,48500,Yes,Yes
+BMW,i3,2021,BEV,48500,Yes,Yes
+BMW,i3,2022,BEV,48500,Yes,Yes
+BMW,i3,2023,BEV,48500,Yes,Yes
+BMW,i3,2024,BEV,48500,Yes,Yes
+BMW,i3,2025,BEV,48500,Yes,Yes
+BMW,i4,2015,BEV,61000,Maybe,Yes
+BMW,i4,2016,BEV,61000,Maybe,Yes
+BMW,i4,2017,BEV,61000,Yes,Yes
+BMW,i4,2018,BEV,61000,Yes,Yes
+BMW,i4,2019,BEV,61000,Yes,Yes
+BMW,i4,2020,BEV,61000,Yes,Yes
+BMW,i4,2021,BEV,61000,Yes,Yes
+BMW,i4,2022,BEV,61000,Yes,Yes
+BMW,i4,2023,BEV,61000,Yes,Yes
+BMW,i4,2024,BEV,61000,Yes,Yes
+BMW,i4,2025,BEV,61000,Yes,Yes
+BMW,iX,2015,BEV,94000,Maybe,Yes
+BMW,iX,2016,BEV,94000,Maybe,Yes
+BMW,iX,2017,BEV,94000,Yes,Yes
+BMW,iX,2018,BEV,94000,Yes,Yes
+BMW,iX,2019,BEV,94000,Yes,Yes
+BMW,iX,2020,BEV,94000,Yes,Yes
+BMW,iX,2021,BEV,94000,Yes,Yes
+BMW,iX,2022,BEV,94000,Yes,Yes
+BMW,iX,2023,BEV,94000,Yes,Yes
+BMW,iX,2024,BEV,94000,Yes,Yes
+BMW,iX,2025,BEV,94000,Yes,Yes
+Mercedes-Benz,EQB,2015,BEV,60000,Maybe,Yes
+Mercedes-Benz,EQB,2016,BEV,60000,Maybe,Yes
+Mercedes-Benz,EQB,2017,BEV,60000,Yes,Yes
+Mercedes-Benz,EQB,2018,BEV,60000,Yes,Yes
+Mercedes-Benz,EQB,2019,BEV,60000,Yes,Yes
+Mercedes-Benz,EQB,2020,BEV,60000,Yes,Yes
+Mercedes-Benz,EQB,2021,BEV,60000,Yes,Yes
+Mercedes-Benz,EQB,2022,BEV,60000,Yes,Yes
+Mercedes-Benz,EQB,2023,BEV,60000,Yes,Yes
+Mercedes-Benz,EQB,2024,BEV,60000,Yes,Yes
+Mercedes-Benz,EQB,2025,BEV,60000,Yes,Yes
+Mercedes-Benz,EQS,2015,BEV,118500,Maybe,Yes
+Mercedes-Benz,EQS,2016,BEV,118500,Maybe,Yes
+Mercedes-Benz,EQS,2017,BEV,118500,Yes,Yes
+Mercedes-Benz,EQS,2018,BEV,118500,Yes,Yes
+Mercedes-Benz,EQS,2019,BEV,118500,Yes,Yes
+Mercedes-Benz,EQS,2020,BEV,118500,Yes,Yes
+Mercedes-Benz,EQS,2021,BEV,118500,Yes,Yes
+Mercedes-Benz,EQS,2022,BEV,118500,Yes,Yes
+Mercedes-Benz,EQS,2023,BEV,118500,Yes,Yes
+Mercedes-Benz,EQS,2024,BEV,118500,Yes,Yes
+Mercedes-Benz,EQS,2025,BEV,118500,Yes,Yes
+Audi,e-tron,2015,BEV,74500,Maybe,Yes
+Audi,e-tron,2016,BEV,74500,Maybe,Yes
+Audi,e-tron,2017,BEV,74500,Yes,Yes
+Audi,e-tron,2018,BEV,74500,Yes,Yes
+Audi,e-tron,2019,BEV,74500,Yes,Yes
+Audi,e-tron,2020,BEV,74500,Yes,Yes
+Audi,e-tron,2021,BEV,74500,Yes,Yes
+Audi,e-tron,2022,BEV,74500,Yes,Yes
+Audi,e-tron,2023,BEV,74500,Yes,Yes
+Audi,e-tron,2024,BEV,74500,Yes,Yes
+Audi,e-tron,2025,BEV,74500,Yes,Yes
+Audi,Q4 e-tron,2015,BEV,54000,Maybe,Yes
+Audi,Q4 e-tron,2016,BEV,54000,Maybe,Yes
+Audi,Q4 e-tron,2017,BEV,54000,Yes,Yes
+Audi,Q4 e-tron,2018,BEV,54000,Yes,Yes
+Audi,Q4 e-tron,2019,BEV,54000,Yes,Yes
+Audi,Q4 e-tron,2020,BEV,54000,Yes,Yes
+Audi,Q4 e-tron,2021,BEV,54000,Yes,Yes
+Audi,Q4 e-tron,2022,BEV,54000,Yes,Yes
+Audi,Q4 e-tron,2023,BEV,54000,Yes,Yes
+Audi,Q4 e-tron,2024,BEV,54000,Yes,Yes
+Audi,Q4 e-tron,2025,BEV,54000,Yes,Yes
+Porsche,Taycan,2015,BEV,137500,Maybe,Yes
+Porsche,Taycan,2016,BEV,137500,Maybe,Yes
+Porsche,Taycan,2017,BEV,137500,Yes,Yes
+Porsche,Taycan,2018,BEV,137500,Yes,Yes
+Porsche,Taycan,2019,BEV,137500,Yes,Yes
+Porsche,Taycan,2020,BEV,137500,Yes,Yes
+Porsche,Taycan,2021,BEV,137500,Yes,Yes
+Porsche,Taycan,2022,BEV,137500,Yes,Yes
+Porsche,Taycan,2023,BEV,137500,Yes,Yes
+Porsche,Taycan,2024,BEV,137500,Yes,Yes
+Porsche,Taycan,2025,BEV,137500,Yes,Yes
+Lucid,Air,2015,BEV,164000,Maybe,Yes
+Lucid,Air,2016,BEV,164000,Maybe,Yes
+Lucid,Air,2017,BEV,164000,Yes,Yes
+Lucid,Air,2018,BEV,164000,Yes,Yes
+Lucid,Air,2019,BEV,164000,Yes,Yes
+Lucid,Air,2020,BEV,164000,Yes,Yes
+Lucid,Air,2021,BEV,164000,Yes,Yes
+Lucid,Air,2022,BEV,164000,Yes,Yes
+Lucid,Air,2023,BEV,164000,Yes,Yes
+Lucid,Air,2024,BEV,164000,Yes,Yes
+Lucid,Air,2025,BEV,164000,Yes,Yes
+Rivian,R1T,2015,BEV,84000,Maybe,Yes
+Rivian,R1T,2016,BEV,84000,Maybe,Yes
+Rivian,R1T,2017,BEV,84000,Yes,Yes
+Rivian,R1T,2018,BEV,84000,Yes,Yes
+Rivian,R1T,2019,BEV,84000,Yes,Yes
+Rivian,R1T,2020,BEV,84000,Yes,Yes
+Rivian,R1T,2021,BEV,84000,Yes,Yes
+Rivian,R1T,2022,BEV,84000,Yes,Yes
+Rivian,R1T,2023,BEV,84000,Yes,Yes
+Rivian,R1T,2024,BEV,84000,Yes,Yes
+Rivian,R1T,2025,BEV,84000,Yes,Yes
+Rivian,R1S,2015,BEV,91500,Maybe,Yes
+Rivian,R1S,2016,BEV,91500,Maybe,Yes
+Rivian,R1S,2017,BEV,91500,Yes,Yes
+Rivian,R1S,2018,BEV,91500,Yes,Yes
+Rivian,R1S,2019,BEV,91500,Yes,Yes
+Rivian,R1S,2020,BEV,91500,Yes,Yes
+Rivian,R1S,2021,BEV,91500,Yes,Yes
+Rivian,R1S,2022,BEV,91500,Yes,Yes
+Rivian,R1S,2023,BEV,91500,Yes,Yes
+Rivian,R1S,2024,BEV,91500,Yes,Yes
+Rivian,R1S,2025,BEV,91500,Yes,Yes
+Toyota,Prius Prime,2015,PHEV,37000,Maybe,Yes
+Toyota,Prius Prime,2016,PHEV,37000,Maybe,Yes
+Toyota,Prius Prime,2017,PHEV,37000,Yes,Yes
+Toyota,Prius Prime,2018,PHEV,37000,Yes,Yes
+Toyota,Prius Prime,2019,PHEV,37000,Yes,Yes
+Toyota,Prius Prime,2020,PHEV,37000,Yes,Yes
+Toyota,Prius Prime,2021,PHEV,37000,Yes,Yes
+Toyota,Prius Prime,2022,PHEV,37000,Yes,Yes
+Toyota,Prius Prime,2023,PHEV,37000,Yes,Yes
+Toyota,Prius Prime,2024,PHEV,37000,Yes,Yes
+Toyota,Prius Prime,2025,PHEV,37000,Yes,Yes
+Toyota,RAV4 Prime,2015,PHEV,50000,Maybe,Yes
+Toyota,RAV4 Prime,2016,PHEV,50000,Maybe,Yes
+Toyota,RAV4 Prime,2017,PHEV,50000,Yes,Yes
+Toyota,RAV4 Prime,2018,PHEV,50000,Yes,Yes
+Toyota,RAV4 Prime,2019,PHEV,50000,Yes,Yes
+Toyota,RAV4 Prime,2020,PHEV,50000,Yes,Yes
+Toyota,RAV4 Prime,2021,PHEV,50000,Yes,Yes
+Toyota,RAV4 Prime,2022,PHEV,50000,Yes,Yes
+Toyota,RAV4 Prime,2023,PHEV,50000,Yes,Yes
+Toyota,RAV4 Prime,2024,PHEV,50000,Yes,Yes
+Toyota,RAV4 Prime,2025,PHEV,50000,Yes,Yes
+Ford,Escape PHEV,2015,PHEV,44000,Maybe,Yes
+Ford,Escape PHEV,2016,PHEV,44000,Maybe,Yes
+Ford,Escape PHEV,2017,PHEV,44000,Yes,Yes
+Ford,Escape PHEV,2018,PHEV,44000,Yes,Yes
+Ford,Escape PHEV,2019,PHEV,44000,Yes,Yes
+Ford,Escape PHEV,2020,PHEV,44000,Yes,Yes
+Ford,Escape PHEV,2021,PHEV,44000,Yes,Yes
+Ford,Escape PHEV,2022,PHEV,44000,Yes,Yes
+Ford,Escape PHEV,2023,PHEV,44000,Yes,Yes
+Ford,Escape PHEV,2024,PHEV,44000,Yes,Yes
+Ford,Escape PHEV,2025,PHEV,44000,Yes,Yes
+Kia,Niro PHEV,2015,PHEV,37500,Maybe,Yes
+Kia,Niro PHEV,2016,PHEV,37500,Maybe,Yes
+Kia,Niro PHEV,2017,PHEV,37500,Yes,Yes
+Kia,Niro PHEV,2018,PHEV,37500,Yes,Yes
+Kia,Niro PHEV,2019,PHEV,37500,Yes,Yes
+Kia,Niro PHEV,2020,PHEV,37500,Yes,Yes
+Kia,Niro PHEV,2021,PHEV,37500,Yes,Yes
+Kia,Niro PHEV,2022,PHEV,37500,Yes,Yes
+Kia,Niro PHEV,2023,PHEV,37500,Yes,Yes
+Kia,Niro PHEV,2024,PHEV,37500,Yes,Yes
+Kia,Niro PHEV,2025,PHEV,37500,Yes,Yes
+Hyundai,Tucson PHEV,2015,PHEV,41500,Maybe,Yes
+Hyundai,Tucson PHEV,2016,PHEV,41500,Maybe,Yes
+Hyundai,Tucson PHEV,2017,PHEV,41500,Yes,Yes
+Hyundai,Tucson PHEV,2018,PHEV,41500,Yes,Yes
+Hyundai,Tucson PHEV,2019,PHEV,41500,Yes,Yes
+Hyundai,Tucson PHEV,2020,PHEV,41500,Yes,Yes
+Hyundai,Tucson PHEV,2021,PHEV,41500,Yes,Yes
+Hyundai,Tucson PHEV,2022,PHEV,41500,Yes,Yes
+Hyundai,Tucson PHEV,2023,PHEV,41500,Yes,Yes
+Hyundai,Tucson PHEV,2024,PHEV,41500,Yes,Yes
+Hyundai,Tucson PHEV,2025,PHEV,41500,Yes,Yes
+Hyundai,Santa Fe PHEV,2015,PHEV,47000,Maybe,Yes
+Hyundai,Santa Fe PHEV,2016,PHEV,47000,Maybe,Yes
+Hyundai,Santa Fe PHEV,2017,PHEV,47000,Yes,Yes
+Hyundai,Santa Fe PHEV,2018,PHEV,47000,Yes,Yes
+Hyundai,Santa Fe PHEV,2019,PHEV,47000,Yes,Yes
+Hyundai,Santa Fe PHEV,2020,PHEV,47000,Yes,Yes
+Hyundai,Santa Fe PHEV,2021,PHEV,47000,Yes,Yes
+Hyundai,Santa Fe PHEV,2022,PHEV,47000,Yes,Yes
+Hyundai,Santa Fe PHEV,2023,PHEV,47000,Yes,Yes
+Hyundai,Santa Fe PHEV,2024,PHEV,47000,Yes,Yes
+Hyundai,Santa Fe PHEV,2025,PHEV,47000,Yes,Yes
+Jeep,Wrangler 4xe,2015,PHEV,57000,Maybe,Yes
+Jeep,Wrangler 4xe,2016,PHEV,57000,Maybe,Yes
+Jeep,Wrangler 4xe,2017,PHEV,57000,Yes,Yes
+Jeep,Wrangler 4xe,2018,PHEV,57000,Yes,Yes
+Jeep,Wrangler 4xe,2019,PHEV,57000,Yes,Yes
+Jeep,Wrangler 4xe,2020,PHEV,57000,Yes,Yes
+Jeep,Wrangler 4xe,2021,PHEV,57000,Yes,Yes
+Jeep,Wrangler 4xe,2022,PHEV,57000,Yes,Yes
+Jeep,Wrangler 4xe,2023,PHEV,57000,Yes,Yes
+Jeep,Wrangler 4xe,2024,PHEV,57000,Yes,Yes
+Jeep,Wrangler 4xe,2025,PHEV,57000,Yes,Yes
+Jeep,Grand Cherokee 4xe,2015,PHEV,67500,Maybe,Yes
+Jeep,Grand Cherokee 4xe,2016,PHEV,67500,Maybe,Yes
+Jeep,Grand Cherokee 4xe,2017,PHEV,67500,Yes,Yes
+Jeep,Grand Cherokee 4xe,2018,PHEV,67500,Yes,Yes
+Jeep,Grand Cherokee 4xe,2019,PHEV,67500,Yes,Yes
+Jeep,Grand Cherokee 4xe,2020,PHEV,67500,Yes,Yes
+Jeep,Grand Cherokee 4xe,2021,PHEV,67500,Yes,Yes
+Jeep,Grand Cherokee 4xe,2022,PHEV,67500,Yes,Yes
+Jeep,Grand Cherokee 4xe,2023,PHEV,67500,Yes,Yes
+Jeep,Grand Cherokee 4xe,2024,PHEV,67500,Yes,Yes
+Jeep,Grand Cherokee 4xe,2025,PHEV,67500,Yes,Yes
+Volvo,XC60 Recharge,2015,PHEV,63000,Maybe,Yes
+Volvo,XC60 Recharge,2016,PHEV,63000,Maybe,Yes
+Volvo,XC60 Recharge,2017,PHEV,63000,Yes,Yes
+Volvo,XC60 Recharge,2018,PHEV,63000,Yes,Yes
+Volvo,XC60 Recharge,2019,PHEV,63000,Yes,Yes
+Volvo,XC60 Recharge,2020,PHEV,63000,Yes,Yes
+Volvo,XC60 Recharge,2021,PHEV,63000,Yes,Yes
+Volvo,XC60 Recharge,2022,PHEV,63000,Yes,Yes
+Volvo,XC60 Recharge,2023,PHEV,63000,Yes,Yes
+Volvo,XC60 Recharge,2024,PHEV,63000,Yes,Yes
+Volvo,XC60 Recharge,2025,PHEV,63000,Yes,Yes
+Volvo,XC90 Recharge,2015,PHEV,78500,Maybe,Yes
+Volvo,XC90 Recharge,2016,PHEV,78500,Maybe,Yes
+Volvo,XC90 Recharge,2017,PHEV,78500,Yes,Yes
+Volvo,XC90 Recharge,2018,PHEV,78500,Yes,Yes
+Volvo,XC90 Recharge,2019,PHEV,78500,Yes,Yes
+Volvo,XC90 Recharge,2020,PHEV,78500,Yes,Yes
+Volvo,XC90 Recharge,2021,PHEV,78500,Yes,Yes
+Volvo,XC90 Recharge,2022,PHEV,78500,Yes,Yes
+Volvo,XC90 Recharge,2023,PHEV,78500,Yes,Yes
+Volvo,XC90 Recharge,2024,PHEV,78500,Yes,Yes
+Volvo,XC90 Recharge,2025,PHEV,78500,Yes,Yes
+BMW,330e,2015,PHEV,50000,Maybe,Yes
+BMW,330e,2016,PHEV,50000,Maybe,Yes
+BMW,330e,2017,PHEV,50000,Yes,Yes
+BMW,330e,2018,PHEV,50000,Yes,Yes
+BMW,330e,2019,PHEV,50000,Yes,Yes
+BMW,330e,2020,PHEV,50000,Yes,Yes
+BMW,330e,2021,PHEV,50000,Yes,Yes
+BMW,330e,2022,PHEV,50000,Yes,Yes
+BMW,330e,2023,PHEV,50000,Yes,Yes
+BMW,330e,2024,PHEV,50000,Yes,Yes
+BMW,330e,2025,PHEV,50000,Yes,Yes
+BMW,X5 xDrive45e,2015,PHEV,75000,Maybe,Yes
+BMW,X5 xDrive45e,2016,PHEV,75000,Maybe,Yes
+BMW,X5 xDrive45e,2017,PHEV,75000,Yes,Yes
+BMW,X5 xDrive45e,2018,PHEV,75000,Yes,Yes
+BMW,X5 xDrive45e,2019,PHEV,75000,Yes,Yes
+BMW,X5 xDrive45e,2020,PHEV,75000,Yes,Yes
+BMW,X5 xDrive45e,2021,PHEV,75000,Yes,Yes
+BMW,X5 xDrive45e,2022,PHEV,75000,Yes,Yes
+BMW,X5 xDrive45e,2023,PHEV,75000,Yes,Yes
+BMW,X5 xDrive45e,2024,PHEV,75000,Yes,Yes
+BMW,X5 xDrive45e,2025,PHEV,75000,Yes,Yes
+Mercedes-Benz,GLE 350e,2015,PHEV,67500,Maybe,Yes
+Mercedes-Benz,GLE 350e,2016,PHEV,67500,Maybe,Yes
+Mercedes-Benz,GLE 350e,2017,PHEV,67500,Yes,Yes
+Mercedes-Benz,GLE 350e,2018,PHEV,67500,Yes,Yes
+Mercedes-Benz,GLE 350e,2019,PHEV,67500,Yes,Yes
+Mercedes-Benz,GLE 350e,2020,PHEV,67500,Yes,Yes
+Mercedes-Benz,GLE 350e,2021,PHEV,67500,Yes,Yes
+Mercedes-Benz,GLE 350e,2022,PHEV,67500,Yes,Yes
+Mercedes-Benz,GLE 350e,2023,PHEV,67500,Yes,Yes
+Mercedes-Benz,GLE 350e,2024,PHEV,67500,Yes,Yes
+Mercedes-Benz,GLE 350e,2025,PHEV,67500,Yes,Yes
+Toyota,Mirai,2015,FCEV,58500,Maybe,Yes
+Toyota,Mirai,2016,FCEV,58500,Maybe,Yes
+Toyota,Mirai,2017,FCEV,58500,Yes,Yes
+Toyota,Mirai,2018,FCEV,58500,Yes,Yes
+Toyota,Mirai,2019,FCEV,58500,Yes,Yes
+Toyota,Mirai,2020,FCEV,58500,Yes,Yes
+Toyota,Mirai,2021,FCEV,58500,Yes,Yes
+Toyota,Mirai,2022,FCEV,58500,Yes,Yes
+Toyota,Mirai,2023,FCEV,58500,Yes,Yes
+Toyota,Mirai,2024,FCEV,58500,Yes,Yes
+Toyota,Mirai,2025,FCEV,58500,Yes,Yes
+Hyundai,Nexo,2015,FCEV,66000,Maybe,Yes
+Hyundai,Nexo,2016,FCEV,66000,Maybe,Yes
+Hyundai,Nexo,2017,FCEV,66000,Yes,Yes
+Hyundai,Nexo,2018,FCEV,66000,Yes,Yes
+Hyundai,Nexo,2019,FCEV,66000,Yes,Yes
+Hyundai,Nexo,2020,FCEV,66000,Yes,Yes
+Hyundai,Nexo,2021,FCEV,66000,Yes,Yes
+Hyundai,Nexo,2022,FCEV,66000,Yes,Yes
+Hyundai,Nexo,2023,FCEV,66000,Yes,Yes
+Hyundai,Nexo,2024,FCEV,66000,Yes,Yes
+Hyundai,Nexo,2025,FCEV,66000,Yes,Yes
+Honda,Clarity Fuel Cell,2015,FCEV,59000,Maybe,Yes
+Honda,Clarity Fuel Cell,2016,FCEV,59000,Maybe,Yes
+Honda,Clarity Fuel Cell,2017,FCEV,59000,Yes,Yes
+Honda,Clarity Fuel Cell,2018,FCEV,59000,Yes,Yes
+Honda,Clarity Fuel Cell,2019,FCEV,59000,Yes,Yes
+Honda,Clarity Fuel Cell,2020,FCEV,59000,Yes,Yes
+Honda,Clarity Fuel Cell,2021,FCEV,59000,Yes,Yes
+Honda,Clarity Fuel Cell,2022,FCEV,59000,Yes,Yes
+Honda,Clarity Fuel Cell,2023,FCEV,59000,Yes,Yes
+Honda,Clarity Fuel Cell,2024,FCEV,59000,Yes,Yes
+Honda,Clarity Fuel Cell,2025,FCEV,59000,Yes,Yes

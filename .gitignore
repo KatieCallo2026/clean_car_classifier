@@ -35,3 +35,11 @@ dist-ssr
 *.pth
 *.onnx
 models/*.pb
+
+# Python virtual environments
+backend/venv/
+backend/env/
+venv/
+env/
+__pycache__/
+*.py[cod]

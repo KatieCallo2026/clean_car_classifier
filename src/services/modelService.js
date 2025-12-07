@@ -1,19 +1,16 @@
 /**
  * Model Service for Clean Car Classification
  * 
- * This service handles communication with the trained CNN model.
- * Currently configured for local testing with simulation mode.
+ * This service communicates with the Python FastAPI backend
+ * that serves your trained Keras MobileNetV2 model.
  * 
- * INTEGRATION INSTRUCTIONS:
- * 1. Replace MODEL_API_ENDPOINT with your deployed model URL
- * 2. Update predictCarModel() to send actual image data to your model
- * 3. Modify response parsing to match your model's output format
- * 4. Add authentication if required by your API
+ * Backend must be running on http://localhost:8000
+ * Start it with: cd backend && python app.py
  */
 
 // Configuration
-const USE_SIMULATION = true; // Set to false when real model is ready
-const MODEL_API_ENDPOINT = 'https://your-model-api.com/predict'; // Replace with actual endpoint
+const USE_SIMULATION = false; // Using real model via backend
+const BACKEND_URL = 'http://localhost:8000';
 
 // Simulation data - remove when real model is integrated
 const SIMULATION_MODELS = [
@@ -28,7 +25,72 @@ const SIMULATION_MODELS = [
 ];
 
 /**
- * Predicts car model from uploaded image
+ * Check if backend server is running and healthy
+ * @returns {Promise<Object>} Backend status and info
+ */
+export async function checkBackendHealth() {
+    try {
+        console.log('🔍 Checking backend at:', BACKEND_URL);
+        const response = await fetch(`${BACKEND_URL}/`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            },
+        });
+        console.log('📡 Response status:', response.status, response.statusText);
+        if (!response.ok) {
+            throw new Error(`Backend returned status ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('✅ Backend connected:', data);
+        return data;
+    } catch (error) {
+        console.error('❌ Backend health check failed:', error);
+        console.error('❌ Error details:', {
+            name: error.name,
+            message: error.message,
+            cause: error.cause
+        });
+        throw new Error(
+            'Backend server is not running. Please start it with:\n' +
+            'cd backend && python app.py'
+        );
+    }
+}
+
+/**
+ * Get model information from backend
+ * @returns {Promise<Object>} Model metadata
+ */
+export async function getModelInfo() {
+    try {
+        const response = await fetch(`${BACKEND_URL}/model-info`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch model info');
+        }
+        const data = await response.json();
+        return {
+            loaded: true,
+            numClasses: data.num_classes,
+            eligibleCount: data.eligible_count,
+            modelType: data.model_type,
+            hasClassNames: data.has_class_names,
+            hasEligibilityMap: data.has_eligibility_map
+        };
+    } catch (error) {
+        console.error('Model info error:', error);
+        return {
+            loaded: false,
+            numClasses: 0,
+            eligibleCount: 0,
+            modelType: 'MobileNetV2 (Backend)',
+            error: error.message
+        };
+    }
+}
+
+/**
+ * Predicts car model from uploaded image using backend API
  * @param {File} imageFile - The uploaded car image
  * @returns {Promise<Object>} Prediction result with model name, qualification status, and confidence
  */
@@ -37,62 +99,111 @@ export async function predictCarModel(imageFile) {
         return simulateModelPrediction(imageFile);
     }
 
-    try {
-        // Prepare image data for model
-        const formData = new FormData();
-        formData.append('image', imageFile);
+    // Validate file first
+    const validation = validateImageFile(imageFile);
+    if (!validation.isValid) {
+        throw new Error(validation.error);
+    }
 
-        // Call your trained model API
-        const response = await fetch(MODEL_API_ENDPOINT, {
+    try {
+        // Prepare image data for backend
+        const formData = new FormData();
+        formData.append('file', imageFile);
+
+        console.log('🔄 Sending image to backend for classification...');
+
+        // Call backend API
+        const response = await fetch(`${BACKEND_URL}/predict`, {
             method: 'POST',
-            body: formData,
-            headers: {
-                // Add any required headers (authentication, etc.)
-                // 'Authorization': 'Bearer YOUR_API_KEY',
-            }
+            body: formData
         });
 
         if (!response.ok) {
-            throw new Error(`Model API error: ${response.status}`);
+            const error = await response.json();
+            throw new Error(error.detail || `Backend error: ${response.status}`);
         }
 
         const data = await response.json();
 
-        // Parse model response and check qualification
-        // Adjust this based on your model's actual response format
+        console.log('🚗 Prediction received:', data);
+
+        // Return standardized format
         return {
-            name: data.predicted_model,
-            qualified: await checkQualification(data.predicted_model),
+            name: data.name,
+            qualified: data.qualified,
             confidence: data.confidence,
-            raw: data // Keep raw response for debugging
+            classIndex: data.class_index,
+            eligibilityReason: data.eligibility_reason
         };
 
     } catch (error) {
-        console.error('Error calling model API:', error);
-        throw new Error('Failed to analyze car image. Please try again.');
+        console.error('Error calling backend API:', error);
+        
+        // Provide helpful error messages
+        if (error.message.includes('fetch')) {
+            throw new Error(
+                'Cannot connect to backend server. ' +
+                'Make sure it\'s running: cd backend && python app.py'
+            );
+        }
+        
+        throw new Error(error.message || 'Failed to analyze car image. Please try again.');
     }
 }
 
 /**
- * Checks if a car model qualifies for Clean Cars 4 All benefits
- * @param {string} modelName - The predicted car model name
- * @returns {Promise<boolean>} Whether the car qualifies
+ * Predicts car model from image URL using backend API
+ * @param {string} imageUrl - URL to the car image
+ * @returns {Promise<Object>} Prediction result with model name, qualification status, and confidence
  */
-async function checkQualification(modelName) {
-    // TODO: Integrate with Clean Cars 4 All database/API
-    // For now, using simple keyword matching
-    const qualifiedKeywords = [
-        'BEV', 'EV', 'Electric',
-        'PHEV', 'Plug-in Hybrid',
-        'Hybrid',
-        'Tesla', 'Nissan Leaf', 'Chevrolet Bolt',
-        'Prius Prime', 'Ioniq'
-    ];
+export async function predictCarModelFromUrl(imageUrl) {
+    if (USE_SIMULATION) {
+        return simulateModelPrediction({ name: 'URL Image' });
+    }
 
-    const modelLower = modelName.toLowerCase();
-    return qualifiedKeywords.some(keyword => 
-        modelLower.includes(keyword.toLowerCase())
-    );
+    try {
+        console.log('🔄 Sending URL to backend for classification:', imageUrl);
+
+        // Call backend API with URL
+        const response = await fetch(`${BACKEND_URL}/predict-url`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url: imageUrl })
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || `Backend error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        console.log('🚗 Prediction received:', data);
+
+        // Return standardized format
+        return {
+            name: data.name,
+            qualified: data.qualified,
+            confidence: data.confidence,
+            classIndex: data.class_index,
+            eligibilityReason: data.eligibility_reason
+        };
+
+    } catch (error) {
+        console.error('Error calling backend API:', error);
+        
+        // Provide helpful error messages
+        if (error.message.includes('fetch')) {
+            throw new Error(
+                'Cannot connect to backend server. ' +
+                'Make sure it\'s running: cd backend && python app.py'
+            );
+        }
+        
+        throw new Error(error.message || 'Failed to analyze car image from URL. Please try again.');
+    }
 }
 
 /**
@@ -134,23 +245,9 @@ export function validateImageFile(file) {
         return { isValid: false, error: 'File size exceeds 5MB limit' };
     }
 
-    if (!ALLOWED_TYPES.includes(file.type)) {
+    if (!ALLOWED_TYPES.includes(file.type.toLowerCase())) {
         return { isValid: false, error: 'Invalid file type. Please upload JPG, PNG, or HEIC' };
     }
 
     return { isValid: true };
-}
-
-/**
- * Converts image file to base64 for API transmission (if needed)
- * @param {File} file - The image file
- * @returns {Promise<string>} Base64 encoded image
- */
-export async function convertImageToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
 }

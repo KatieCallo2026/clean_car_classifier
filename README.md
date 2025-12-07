@@ -88,56 +88,89 @@ CleanCars/
 
 ## 🤖 Model Integration
 
-### Current Status: Simulation Mode
+### Current Status: Using Your Keras Model Directly! ✅
 
-The application currently runs in **simulation mode** while the CNN model is being trained in Google Colab. To integrate your trained model:
+The application now uses a **Python FastAPI backend** that loads your trained `.keras` model directly - **no conversion needed**!
+
+### Architecture
+
+```
+User Browser (React)  →  Backend API (Python)  →  Keras Model
+    localhost:3000           localhost:8000         MobileNetV2
+```
 
 ### Integration Steps
 
-1. **Deploy Your Model**:
-   - Deploy your trained CNN model to a cloud platform (AWS, GCP, Azure, Hugging Face)
-   - Obtain the API endpoint URL
+#### 1. Export Metadata from Google Colab
 
-2. **Update Model Service** (`src/services/modelService.js`):
-   ```javascript
-   // Line 10-11: Update these constants
-   const USE_SIMULATION = false;  // Disable simulation
-   const MODEL_API_ENDPOINT = 'https://your-api.com/predict';
-   ```
+In your Colab notebook, run:
+```python
+import json
 
-3. **Modify API Call** (if needed):
-   ```javascript
-   // Adjust the predictCarModel() function to match your API format
-   // The function already handles FormData upload and JSON response
-   ```
+# Save class names (196 car model names)
+with open('/content/drive/MyDrive/class_names.json', 'w') as f:
+    json.dump(class_names, f, indent=2)
 
-4. **Update Response Parsing**:
-   ```javascript
-   // Modify lines 48-54 to match your model's response format
-   return {
-       name: data.predicted_model,      // Adjust field names
-       qualified: await checkQualification(data.predicted_model),
-       confidence: data.confidence,
-       raw: data
-   };
-   ```
+# Save eligibility map (0 or 1 for each class)
+with open('/content/drive/MyDrive/eligibility_map.json', 'w') as f:
+    json.dump(eligibility_map.tolist(), f, indent=2)
+```
+
+See `backend/EXPORT_METADATA.md` for detailed instructions.
+
+#### 2. Add Files to Project
+
+Place the exported files in:
+```
+src/services/clean_car_tax_break_final_model/
+├── clean_car_eligibility_model.keras  ✅ (already here)
+├── model_config.json                   ✅ (already here)
+├── class_names.json                    ⬅️ ADD THIS
+└── eligibility_map.json                ⬅️ ADD THIS
+```
+
+#### 3. Setup Backend
+
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate  # On Mac/Linux
+pip install -r requirements.txt
+```
+
+#### 4. Start Backend Server
+
+```bash
+python app.py
+```
+
+Backend runs at `http://localhost:8000`
+
+#### 5. Start React App (in new terminal)
+
+```bash
+npm run dev
+```
+
+React app runs at `http://localhost:3000`
+
+### Backend API Endpoints
+
+- `GET /` - Health check
+- `POST /predict` - Classify car image
+- `GET /model-info` - Get model metadata
+- `GET /classes` - List all car classes
+- `GET /eligible-cars` - List eligible cars only
+
+See `backend/README.md` for full API documentation.
 
 ### Model Requirements
 
-Your trained model should accept:
-- **Input**: Car image (JPG, PNG, HEIC, up to 5MB)
-- **Output**: JSON with predicted make/model and confidence score
-
-Example expected response:
-```json
-{
-  "predicted_model": "Tesla Model 3 (BEV)",
-  "confidence": 0.982,
-  "make": "Tesla",
-  "model": "Model 3",
-  "year": 2023
-}
-```
+Your Keras model:
+- **Input**: 224x224 RGB images
+- **Output**: 196 class probabilities (Cars196 dataset)
+- **Preprocessing**: MobileNetV2 normalization [-1, 1]
+- **Format**: `.keras` file (TensorFlow 2.15+)
 
 ## 🎨 Features
 
