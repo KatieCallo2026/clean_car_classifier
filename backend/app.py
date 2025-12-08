@@ -6,26 +6,36 @@ from fastapi import FastAPI, File, UploadFile, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
-import tensorflow as tf
-import numpy as np
-import pandas as pd
-from PIL import Image
+import logging
+import sys
 import json
 import io
 import os
 from pathlib import Path
-import logging
-import requests
-from pydantic import BaseModel
-import sys
 
-# Setup logging with explicit stdout for Railway
+# Setup logging FIRST with explicit stdout for Railway
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[logging.StreamHandler(sys.stdout)]
 )
 logger = logging.getLogger(__name__)
+
+# Try to import TensorFlow - if it fails, app can still start
+try:
+    import tensorflow as tf
+    logger.info(f"✅ TensorFlow imported successfully: {tf.__version__}")
+except Exception as e:
+    tf = None
+    logger.error(f"❌ TensorFlow import failed: {e}", exc_info=True)
+    logger.error("⚠️  Model predictions will not work, but healthcheck will pass")
+
+# Import other dependencies
+import numpy as np
+import pandas as pd
+from PIL import Image
+import requests
+from pydantic import BaseModel
 
 # Pydantic model for URL request
 class ImageURLRequest(BaseModel):
@@ -102,9 +112,16 @@ async def startup_event():
     logger.info("🚀 CleanCar Classifier API - Starting Up")
     logger.info("=" * 80)
     logger.info(f"🐍 Python: {sys.version}")
-    logger.info(f"📦 TensorFlow: {tf.__version__}")
+    logger.info(f"📦 TensorFlow: {getattr(tf, '__version__', 'NOT AVAILABLE')}")
     logger.info(f"📁 Working Directory: {Path.cwd()}")
     logger.info(f"🌐 PORT: {os.environ.get('PORT', 'not set')}")
+    
+    # Check if TensorFlow is available
+    if tf is None:
+        logger.error("❌ TensorFlow not available - cannot load model")
+        logger.error("⚠️  Service will start but predictions will fail with 503")
+        MODEL_LOADING = False
+        return
     
     # Find model
     BACKEND_DIR = Path(__file__).parent
@@ -228,7 +245,7 @@ async def health(request: Request):
         "num_classes": len(class_names) if class_names else 0,
         "eligible_vehicles": len([v for v in eligibility_lookup.values() if v]) if eligibility_lookup else 0,
         "total_vehicles": len(eligibility_lookup) if eligibility_lookup else 0,
-        "tensorflow_version": tf.__version__,
+        "tensorflow_version": getattr(tf, "__version__", "unavailable"),
         "python_version": sys.version.split()[0]
     }
     
@@ -410,7 +427,7 @@ async def model_info():
         "total_csv_entries": len(clean_vehicles_df) if clean_vehicles_df is not None else 0,
         "model_type": "MobileNetV2 Transfer Learning",
         "input_size": [224, 224, 3],
-        "tensorflow_version": tf.__version__
+        "tensorflow_version": getattr(tf, "__version__", "unavailable")
     }
 
 @app.get("/classes")
