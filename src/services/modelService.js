@@ -4,13 +4,42 @@
  * This service communicates with the Python FastAPI backend
  * that serves your trained Keras MobileNetV2 model.
  * 
- * Backend must be running on http://localhost:8000
- * Start it with: cd backend && python app.py
+ * Falls back to client-side CSV matc    } catch (error) {
+        console.error('Error calling backend API:', error);
+        
+        // Try client-side fallback if enabled
+        if (USE_FALLBACK_ON_ERROR) {
+            console.log('🔄 Using client-side fallback (backend unavailable)...');
+            const urlLower = imageUrl.toLowerCase();
+            const fallback = fallbackPrediction(urlLower);
+            
+            return {
+                ...fallback,
+                backendError: error.message,
+                usingFallback: true,
+                classIndex: 0
+            };
+        }
+        
+        // Provide helpful error messages
+        if (error.message.includes('fetch')) {
+            throw new Error(
+                'Cannot connect to backend server. ' +
+                'Please check your internet connection or try again later.'
+            );
+        }
+        
+        throw new Error(error.message || 'Failed to analyze car image from URL. Please try again.');
+    }
+}end is unavailable.
  */
+
+import { fallbackPrediction, checkEligibilityClientSide, getEligibleVehiclesList, searchEligibleVehicles } from './fallbackService';
 
 // Configuration
 const USE_SIMULATION = false; // Using real model via backend
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+const USE_FALLBACK_ON_ERROR = true; // Enable client-side fallback when backend fails
 
 // Simulation data - remove when real model is integrated
 const SIMULATION_MODELS = [
@@ -139,6 +168,20 @@ export async function predictCarModel(imageFile) {
     } catch (error) {
         console.error('Error calling backend API:', error);
         
+        // Try client-side fallback if enabled
+        if (USE_FALLBACK_ON_ERROR) {
+            console.log('🔄 Using client-side fallback (backend unavailable)...');
+            const fileName = imageFile.name.toLowerCase();
+            const fallback = fallbackPrediction(fileName);
+            
+            return {
+                ...fallback,
+                backendError: error.message,
+                usingFallback: true,
+                classIndex: 0
+            };
+        }
+        
         // Provide helpful error messages
         if (error.message.includes('fetch')) {
             throw new Error(
@@ -251,3 +294,6 @@ export function validateImageFile(file) {
 
     return { isValid: true };
 }
+
+// Re-export fallback functions for direct use
+export { checkEligibilityClientSide, getEligibleVehiclesList, searchEligibleVehicles };

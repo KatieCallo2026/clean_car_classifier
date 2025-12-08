@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Upload, Car, CheckCircle, XCircle, ImageIcon, AlertCircle, RotateCcw } from 'lucide-react';
-import { predictCarModel, predictCarModelFromUrl, checkBackendHealth, getModelInfo } from './services/modelService';
+import { predictCarModel, predictCarModelFromUrl, checkBackendHealth, getModelInfo, getEligibleVehiclesList, searchEligibleVehicles, checkEligibilityClientSide } from './services/modelService';
 
 // --- Firebase Configuration Placeholder ---
 // TODO: Replace with actual Firebase config when backend is ready
@@ -17,6 +17,12 @@ const App = () => {
     const [error, setError] = useState(null);
     const [modelInfo, setModelInfo] = useState(null);
     const [backendStatus, setBackendStatus] = useState('checking'); // 'checking', 'connected', 'error'
+    
+    // Fallback manual input state
+    const [showManualInput, setShowManualInput] = useState(false);
+    const [manualMake, setManualMake] = useState('');
+    const [manualModel, setManualModel] = useState('');
+    const [eligibleVehicles] = useState(() => getEligibleVehiclesList());
 
     // Check backend connection on mount
     useEffect(() => {
@@ -92,14 +98,31 @@ const App = () => {
         }
     }, [imageUrl]);
 
-    const startAnalysis = async () => {
-        // Check backend status
-        if (backendStatus !== 'connected') {
-            setError('Backend server is not connected. Please start it with: cd backend && python app.py');
+    // Manual eligibility check handler (for fallback mode)
+    const handleManualEligibilityCheck = useCallback(() => {
+        if (!manualMake || !manualModel) {
+            setError('Please enter both make and model');
             return;
         }
+        
+        const eligibilityResult = checkEligibilityClientSide(manualMake, manualModel);
+        
+        setResults({
+            name: `${manualMake} ${manualModel}`,
+            confidence: eligibilityResult.confidence / 100,
+            qualified: eligibilityResult.qualified,
+            eligibility_reason: eligibilityResult.eligibility_reason,
+            usingFallback: true,
+            manualEntry: true
+        });
+        
+        setShowManualInput(false);
+        setManualMake('');
+        setManualModel('');
+    }, [manualMake, manualModel]);
 
-        // Validate input
+    const startAnalysis = async () => {
+        // Validate input (fallback will handle backend connection issues)
         if (inputMode === 'upload' && !file) {
             setError('Please upload a file first');
             return;
@@ -126,6 +149,11 @@ const App = () => {
             }
             
             setResults(prediction);
+            
+            // If fallback requires manual input, show the form
+            if (prediction.usingFallback && prediction.requiresManualInput) {
+                setShowManualInput(true);
+            }
         } catch (err) {
             console.error('Analysis error:', err);
             setError(err.message || 'Failed to analyze image. Please try again.');
@@ -141,6 +169,9 @@ const App = () => {
         setResults(null);
         setError(null);
         setIsAnalyzing(false);
+        setShowManualInput(false);
+        setManualMake('');
+        setManualModel('');
         // Clear file input
         const fileInput = document.getElementById('car-image-upload');
         if (fileInput) fileInput.value = '';
@@ -229,6 +260,93 @@ const App = () => {
             )}
         </div>
     );
+
+    // Manual Input Component (for fallback mode when image recognition fails)
+    const ManualInputPanel = () => {
+        if (!showManualInput) return null;
+        
+        // Get unique makes from eligible vehicles
+        const uniqueMakes = [...new Set(eligibleVehicles.map(v => v.make))].sort();
+        
+        return (
+            <div className="mb-8 p-6 bg-amber-50 border-2 border-amber-300 rounded-2xl">
+                <div className="flex items-start gap-3 mb-4">
+                    <AlertCircle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
+                    <div>
+                        <p className="text-amber-900 font-bold text-lg">Manual Input Required</p>
+                        <p className="text-amber-700 text-sm mt-1">
+                            We couldn't automatically identify the car from the image. Please enter the make and model manually to check eligibility.
+                        </p>
+                    </div>
+                </div>
+                
+                <div className="grid md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Make
+                        </label>
+                        <input
+                            type="text"
+                            value={manualMake}
+                            onChange={(e) => setManualMake(e.target.value)}
+                            placeholder="e.g., Tesla, Chevrolet, Nissan"
+                            list="make-options"
+                            className="w-full px-4 py-3 border-2 border-amber-200 rounded-lg focus:outline-none focus:border-amber-500 bg-white text-gray-800 placeholder-gray-400"
+                        />
+                        <datalist id="make-options">
+                            {uniqueMakes.map(make => (
+                                <option key={make} value={make} />
+                            ))}
+                        </datalist>
+                    </div>
+                    
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Model
+                        </label>
+                        <input
+                            type="text"
+                            value={manualModel}
+                            onChange={(e) => setManualModel(e.target.value)}
+                            placeholder="e.g., Model 3, Bolt EV, Leaf"
+                            className="w-full px-4 py-3 border-2 border-amber-200 rounded-lg focus:outline-none focus:border-amber-500 bg-white text-gray-800 placeholder-gray-400"
+                        />
+                    </div>
+                </div>
+                
+                <button
+                    onClick={handleManualEligibilityCheck}
+                    disabled={!manualMake || !manualModel}
+                    className="mt-4 w-full bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                    Check Eligibility
+                </button>
+                
+                <details className="mt-4">
+                    <summary className="cursor-pointer text-sm text-amber-800 font-semibold hover:text-amber-900">
+                        View all eligible vehicles ({eligibleVehicles.length})
+                    </summary>
+                    <div className="mt-3 max-h-60 overflow-y-auto bg-white rounded-lg p-4 border border-amber-200">
+                        {uniqueMakes.map(make => {
+                            const makeVehicles = eligibleVehicles.filter(v => v.make === make);
+                            return (
+                                <div key={make} className="mb-3">
+                                    <p className="font-bold text-gray-800">{make}</p>
+                                    <ul className="ml-4 text-sm text-gray-600">
+                                        {makeVehicles.map((v, i) => (
+                                            <li key={i}>
+                                                {v.model} ({v.years}) - {v.type}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </details>
+            </div>
+        );
+    };
 
     // Eligibility Panel Component
     const EligibilityPanel = () => {
@@ -336,6 +454,20 @@ const App = () => {
                     </div>
                 )}
 
+                {/* Fallback Mode Banner */}
+                {results?.usingFallback && (
+                    <div className="mb-6 p-4 bg-amber-50 border border-amber-300 rounded-xl flex items-start gap-3">
+                        <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                            <p className="text-amber-800 font-semibold">⚠️ Using Offline Mode</p>
+                            <p className="text-amber-700 text-sm mt-1">
+                                Backend server is currently unavailable. Eligibility checking is based on our embedded database of eligible vehicles.
+                                {results.backendError && ` (${results.backendError})`}
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 {/* Main Input Section */}
                 <section id="input-section">
                     <h1 className="text-4xl sm:text-5xl font-bold leading-tight mb-4 text-coffee-950">
@@ -365,8 +497,7 @@ const App = () => {
                         disabled={
                             (inputMode === 'upload' && !file) || 
                             (inputMode === 'url' && !imageUrl) || 
-                            isAnalyzing || 
-                            backendStatus !== 'connected'
+                            isAnalyzing
                         }
                         onClick={startAnalysis}
                     >
@@ -374,7 +505,11 @@ const App = () => {
                             id="button-spinner" 
                             className={`${isAnalyzing ? '' : 'hidden'} w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3`}
                         ></div>
-                        <span>{isAnalyzing ? 'Analyzing...' : 'Analyze Car for Eligibility'}</span>
+                        <span>
+                            {isAnalyzing ? 'Analyzing...' : 
+                             backendStatus !== 'connected' ? 'Analyze (Offline Mode)' : 
+                             'Analyze Car for Eligibility'}
+                        </span>
                     </button>
                 </section>
 
@@ -394,10 +529,15 @@ const App = () => {
                         </button>
                     </div>
 
+                    {/* Manual Input Panel (shown when fallback requires it) */}
+                    <ManualInputPanel />
+
                     <div className="grid md:grid-cols-2 gap-8">
                         {/* Recognition Panel */}
                         <div className="bg-beige-200 p-6 rounded-2xl border border-beige-300 shadow-sm">
-                            <p className="text-sm font-semibold text-gray-600 mb-2 uppercase tracking-widest">AI Car Recognition</p>
+                            <p className="text-sm font-semibold text-gray-600 mb-2 uppercase tracking-widest">
+                                {results?.usingFallback ? '🔍 Pattern Match' : 'AI Car Recognition'}
+                            </p>
                             <div className="flex items-center gap-4">
                                 <Car className="w-8 h-8 text-coffee-500" />
                                 <p className="text-2xl font-bold text-coffee-950">{results?.name || 'Unknown'}</p>
@@ -405,6 +545,8 @@ const App = () => {
                             <p className="text-xs text-gray-500 mt-2 italic">
                                 Confidence: {results?.confidence ? `${(results.confidence * 100).toFixed(1)}%` : 'N/A'}
                                 {results?.isSimulated && ' (Simulated)'}
+                                {results?.usingFallback && ' (Offline Mode)'}
+                                {results?.manualEntry && ' (Manual Entry)'}
                             </p>
                         </div>
 
