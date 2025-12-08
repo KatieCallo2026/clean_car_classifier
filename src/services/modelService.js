@@ -237,11 +237,25 @@ export async function predictCarModelFromUrl(imageUrl) {
     } catch (error) {
         console.error('Error calling backend API:', error);
         
+        // Try client-side fallback if enabled
+        if (USE_FALLBACK_ON_ERROR) {
+            console.log('🔄 Using client-side fallback for URL (backend unavailable)...');
+            const urlLower = imageUrl.toLowerCase();
+            const fallback = fallbackPrediction(urlLower);
+            
+            return {
+                ...fallback,
+                backendError: error.message,
+                usingFallback: true,
+                classIndex: 0
+            };
+        }
+        
         // Provide helpful error messages
         if (error.message.includes('fetch')) {
             throw new Error(
                 'Cannot connect to backend server. ' +
-                'Make sure it\'s running: cd backend && python app.py'
+                'Please check your internet connection or try again later.'
             );
         }
         
