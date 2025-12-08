@@ -1,15 +1,19 @@
 # Nixpacks configuration for Railway
-# Provides system dependencies for TensorFlow
+# Force Python 3.10 (TensorFlow 2.20 and Pillow compatibility)
 
 [phases.setup]
 nixPkgs = ['python310', 'libGL', 'glib', 'gcc']
+nixOverlays = ['https://github.com/railwayapp/nix-packages/archive/main.tar.gz']
 
 [phases.install]
-cmds = ['pip install --upgrade pip', 'pip install -r requirements.txt']
+cmds = [
+    'python3.10 -m pip install --upgrade pip',
+    'python3.10 -m pip install -r requirements.txt'
+]
 
 [phases.build]
-cmds = ['echo "✅ Build complete - TensorFlow 2.20.0 installed"']
+cmds = ['echo "✅ Build complete - Python 3.10 + TensorFlow 2.20.0"']
 
 [start]
-cmd = 'cd backend && uvicorn app:app --host 0.0.0.0 --port $PORT --workers 1'
+cmd = 'cd backend && python3.10 -m uvicorn app:app --host 0.0.0.0 --port $PORT --workers 1'
 
