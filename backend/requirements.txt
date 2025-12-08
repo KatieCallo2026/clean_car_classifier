@@ -1,13 +1,13 @@
 # Railway-specific requirements (Linux/x86_64)
 # Use this for Railway deployment
-# Python 3.11-3.13 compatible
+# Python 3.11 required (see runtime.txt)
 
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 tensorflow==2.20.0
 pillow==11.0.0
-numpy>=2.1.0
+numpy>=1.26.0
 python-multipart==0.0.6
 pandas==2.2.3
 requests==2.31.0
-pydantic==2.5.0
+pydantic>=2.8.0,<3.0.0

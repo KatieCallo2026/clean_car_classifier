@@ -1,17 +1,17 @@
 # Nixpacks configuration for Railway
-# Allow Python 3.13 (latest) with numpy 2.1.0+
+# Lock to Python 3.11 (stable, widely supported)
 
 [phases.setup]
-nixPkgs = ['python313', 'python313Packages.pip', 'libGL', 'glib', 'gcc']
+nixPkgs = ['python311', 'python311Packages.pip', 'libGL', 'glib', 'gcc']
 
 [phases.install]
 cmds = [
-    'python3.13 -m pip install --upgrade pip',
-    'python3.13 -m pip install -r requirements.txt'
+    'python3.11 -m pip install --upgrade pip',
+    'python3.11 -m pip install -r requirements.txt'
 ]
 
 [phases.build]
-cmds = ['echo "✅ Build complete - Python 3.13 + TensorFlow 2.20.0 + numpy 2.1.0"']
+cmds = ['echo "✅ Build complete - Python 3.11 + TensorFlow 2.20.0 + numpy 1.26.0+"']
 
 [start]
 cmd = 'cd backend && python3.10 -m uvicorn app:app --host 0.0.0.0 --port $PORT --workers 1'
